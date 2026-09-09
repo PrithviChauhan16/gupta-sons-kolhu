@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gupta Sons Kolhu - Premium Theme</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="announcement-bar text-center px-2">
+        <div class="container">
+            <span>Limited Time Offer: Get 15% off on your first purchase! | Free shipping on orders above ₹999</span>
+        </div>
+    </div>
+
+    <!-- Dynamic Header -->
+    <nav class="navbar navbar-expand-lg" id="main-nav">
+        <div class="container flex-wrap">
+            <!-- Brand Image Logo -->
+            <a class="navbar-brand d-flex align-items-center" href="#home">
+                <img src="GUPTA_LOGO_nobg.png" alt="Gupta Sons Kolhu Logo" class="brand-logo">
+            </a>
+
+            <!-- Right Side Controls -->
+            <div class="d-flex align-items-center ms-auto order-lg-3">
+                <div class="header-icons me-2 me-lg-0">
+                    <i class="fa-solid fa-magnifying-glass" title="Search" onclick="handleSearch()"
+                        style="cursor: pointer;"></i>
+                    <a href="#" onclick="handleAccountClick(event)" style="color: inherit;" title="Account"><i
+                            class="fa-regular fa-user"></i></a>
+                    <a href="cart.html" class="position-relative" style="color: inherit;" title="Cart">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span id="cart-badge"
+                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-white"
+                            style="display: none;">0</span>
+                    </a>
+                </div>
+                <!-- Mobile Toggler -->
+                <button class="navbar-toggler border-0 shadow-none p-0 ms-2" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <i class="fa-solid fa-bars fs-4 text-dark"></i>
+                </button>
+            </div>
+
+            <!-- Mobile & Desktop Collapsible Navigation Links -->
+            <div class="collapse navbar-collapse justify-content-center order-lg-2" id="navbarNav">
+                <!-- Mobile Menu Header with Close Button -->
+                <div class="d-flex justify-content-between align-items-center d-lg-none pt-3 pb-2 border-bottom">
+                    <span class="fw-bold text-uppercase small text-muted">Menu</span>
+                    <button type="button" class="btn-close text-reset shadow-none" data-bs-toggle="collapse"
+                        data-bs-target="#navbarNav" aria-label="Close"></button>
+                </div>
+
+                <ul class="navbar-nav text-center text-lg-start my-3 my-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#shop" onclick="filterProducts('all')">Shop</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#categories">Categories</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <h1 class="hero-title">Pure. Wood-Pressed.<br>Traditionally Crafted.</h1>
+            <p class="lead mb-4 fw-light">Experience 100% natural cold-pressed oils made using traditional Kolhu
+                methods—unrefined and chemical-free.</p>
+            <a href="#shop" class="btn-custom d-inline-block" onclick="filterProducts('all')">Shop Collection</a>
+        </div>
+    </section>
+
+    <section class="glass-section text-center">
+        <div class="glass-overlay"></div>
+        <div class="container glass-content">
+            <h2 class="glass-title">Preserving Purity. Honoring Tradition.</h2>
+            <p class="glass-subtitle">Authentic traditional wood-pressed oils.</p>
+            <div class="row g-4 mt-2">
+                <div class="col-6 col-md-4">
+                    <div class="glass-card">
+                        <div class="glass-icon-wrapper"><i class="fa-solid fa-droplet text-white"></i></div>
+                        <h4>100% Wood Pressed</h4>
+                        <p>Slow-extracted using traditional methods.</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4">
+                    <div class="glass-card">
+                        <div class="glass-icon-wrapper"><i class="fa-solid fa-leaf text-white"></i></div>
+                        <h4>Pure Varieties</h4>
+                        <p>A complete range of naturally extracted oils.</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4">
+                    <div class="glass-card">
+                        <div class="glass-icon-wrapper"><i class="fa-solid fa-wand-magic-sparkles text-white"></i></div>
+                        <h4>No Chemicals</h4>
+                        <p>Pure, unprocessed oils without additives.</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4">
+                    <div class="glass-card">
+                        <div class="glass-icon-wrapper"><i class="fa-solid fa-book-open text-white"></i></div>
+                        <h4>Rooted in Tradition</h4>
+                        <p>Time-tested techniques trusted for generations.</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4">
+                    <div class="glass-card">
+                        <div class="glass-icon-wrapper"><i class="fa-solid fa-box-open text-white"></i></div>
+                        <h4>Eco-Friendly</h4>
+                        <p>Freshly packed in clean conditions.</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4">
+                    <div class="glass-card">
+                        <div class="glass-icon-wrapper"><i class="fa-solid fa-handshake-angle text-white"></i></div>
+                        <h4>Integrity</h4>
+                        <p>Dedicated to honest sourcing and quality.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="categories" class="py-5 mt-5 bg-white">
+        <div class="container">
+            <h2 class="section-title">Shop by Category</h2>
+            <div class="row g-3 g-md-4" id="category-grid"></div>
+        </div>
+    </section>
+
+    <section id="shop" class="py-5 mt-4">
+        <div class="container">
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center mb-5">
+                <h2 class="section-title mb-3 mb-sm-0 m-0" id="shop-title"
+                    style="left: 0; transform: none; display: block; text-align: left;">Our Collection</h2>
+                <button class="btn btn-sm btn-outline-custom w-auto px-4 d-none m-0" id="reset-filter-btn"
+                    onclick="filterProducts('all')">View All Products</button>
+            </div>
+            <div class="row g-4" id="product-grid"></div>
+        </div>
+    </section>
+
+    <section id="about" class="about-section mt-5">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6 pe-lg-5 text-center text-lg-start">
+                    <span class="subtitle">About Us</span>
+                    <h2 class="display-5 fw-normal mt-2 mb-4">Where Tradition Meets True Purity</h2>
+                    <p class="text-muted mb-4 fs-5 fw-light">In a world full of refined, chemically processed oils,
+                        Gupta Sons Kolhu stays committed to the slow, traditional wood-pressed method.</p>
+                    <a href="#contact" class="btn-custom d-inline-block mt-2">Get in Touch</a>
+                </div>
+                <div class="col-lg-6"><img
+                        src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=800&q=80"
+                        class="img-fluid about-img" alt="Natural Ingredients"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-5 bg-white">
+        <div class="container py-4">
+            <h2 class="section-title">Contact Us</h2>
+            <div class="row g-5 mt-2">
+                <div class="col-lg-6 text-center text-lg-start">
+                    <h4 class="fw-normal mb-4">We'd love to hear from you</h4>
+                    <p class="text-muted mb-5">Whether you have a question about our traditional extraction process,
+                        bulk orders, or shipping, our team is ready to answer all your questions.</p>
+                    <div
+                        class="contact-info-block mb-4 d-flex align-items-center justify-content-center justify-content-lg-start">
+                        <i class="fa-solid fa-location-dot me-3"></i><span class="text-muted">123 Tradition Lane, New
+                            Delhi, India</span></div>
+                    <div
+                        class="contact-info-block mb-4 d-flex align-items-center justify-content-center justify-content-lg-start">
+                        <i class="fa-solid fa-phone me-3"></i><span class="text-muted">+91-9876543210</span></div>
+                    <div
+                        class="contact-info-block mb-4 d-flex align-items-center justify-content-center justify-content-lg-start">
+                        <i class="fa-solid fa-envelope me-3"></i><span
+                            class="text-muted">support@guptasonskolhu.com</span></div>
+                </div>
+                <div class="col-lg-6">
+                    <form id="contactForm">
+                        <div class="row">
+                            <div class="col-md-6"><input type="text" class="form-control contact-form-control"
+                                    id="contactFName" placeholder="First Name" required></div>
+                            <div class="col-md-6"><input type="text" class="form-control contact-form-control"
+                                    id="contactLName" placeholder="Last Name" required></div>
+                        </div>
+                        <input type="email" class="form-control contact-form-control" id="contactEmail"
+                            placeholder="Email Address" required>
+                        <textarea class="form-control contact-form-control" id="contactMsg" rows="4"
+                            placeholder="Your Message" required></textarea>
+
+                        <div id="msgSuccess"
+                            class="alert alert-success d-none mt-2 small text-center shadow-sm fade show"
+                            style="transition: opacity 0.5s;">Message sent successfully! We will get back to you soon.
+                        </div>
+                        <button type="submit" class="btn-custom mt-3 w-100">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container text-center text-lg-start">
+            <div class="row g-5">
+                <div class="col-lg-4 col-md-6">
+                    <img src="GUPTA_LOGO_nobg.png" alt="Gupta Sons Kolhu Logo" class="footer-logo mb-3">
+                    <p class="text-muted mb-4 pe-lg-4">Pure wood-pressed oils crafted with tradition, honesty, and
+                        uncompromised quality.</p>
+                    <div class="social-icons justify-content-center justify-content-lg-start d-flex"><a href="#"><i
+                                class="fa-brands fa-facebook-f"></i></a><a href="#"><i
+                                class="fa-brands fa-instagram"></i></a><a href="#"><i
+                                class="fa-brands fa-youtube"></i></a></div>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h5>Shop</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#shop" onclick="filterProducts('mustard')">Mustard Oil</a></li>
+                        <li><a href="#shop" onclick="filterProducts('coconut')">Coconut Oil</a></li>
+                        <li><a href="#shop" onclick="filterProducts('almond')">Almond Oil</a></li>
+                        <li><a href="#shop" onclick="filterProducts('sesame')">Sesame Oil</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h5>Support</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="terms.html">Terms & Conditions</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="shipping.html">Shipping Policy</a></li>
+                        <li><a href="#">Track Order</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <h5>Stay Connected</h5>
+                    <p class="text-muted mb-3">Subscribe to get special offers and giveaways.</p>
+                    <div class="input-group mb-3 shadow-sm rounded">
+                        <input type="email" class="form-control rounded-start border-0 py-2 px-3"
+                            placeholder="Enter your email" style="box-shadow: none;">
+                        <button class="btn btn-light rounded-end fw-medium" type="button"
+                            style="background: var(--primary-accent); color: white; border: none; transition: 0.3s;">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center text-muted small mt-5 pt-4 border-top border-secondary">
+                <p class="mb-0">Copyright &copy; 2026 Gupta Sons Kolhu. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Product Details Modal -->
+    <div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header border-0 pb-0 position-absolute top-0 end-0 z-3">
+                    <button type="button" class="btn-close shadow-none m-3 bg-white rounded-circle p-2"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 p-md-5">
+                    <div class="row g-4 align-items-center">
+                        <div class="col-md-6">
+                            <img id="modalMainImg" src="" class="img-fluid rounded mb-3 shadow-sm"
+                                style="width:100%; height:380px; object-fit:cover;" alt="Product Image">
+                            <div id="modalThumbnails" class="d-flex gap-2 overflow-auto pb-2 custom-scrollbar"></div>
+                        </div>
+                        <div class="col-md-6 d-flex flex-column">
+                            <span id="modalCategory"
+                                class="text-uppercase small fw-bold text-muted letter-spacing-1 mb-2">Category</span>
+                            <h2 id="modalTitle" class="fw-bold mb-2 text-dark">Product Title</h2>
+                            <div class="stars mb-3"><i class="fa-solid fa-star" style="color: #E5A93C;"></i><i
+                                    class="fa-solid fa-star" style="color: #E5A93C;"></i><i class="fa-solid fa-star"
+                                    style="color: #E5A93C;"></i><i class="fa-solid fa-star"
+                                    style="color: #E5A93C;"></i><i class="fa-solid fa-star" style="color: #E5A93C;"></i>
+                                <span class="text-muted small ms-1">(124 Reviews)</span></div>
+                            <p id="modalPrice" class="fs-3 text-primary-accent fw-semibold mb-3">Rs. 0.00</p>
+                            <p id="modalDesc" class="text-muted flex-grow-1" style="line-height: 1.6;">Product
+                                description goes here.</p>
+                            <button class="btn-custom w-100 mt-3 py-3" id="modalAddToCartBtn"
+                                onclick="handleAddToCart(event)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Search Modal -->
+    <div class="modal fade" id="searchModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 16px;">
+                <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0 fs-5 text-muted"><i
+                                class="fa-solid fa-magnifying-glass"></i></span>
+                        <input type="text" class="form-control form-control-lg border-start-0 shadow-none ps-0"
+                            id="searchInput" placeholder="Search for oils, seeds, or categories..."
+                            onkeyup="performSearch()" autocomplete="off" style="font-size: 1.1rem;">
+                    </div>
+                    <button type="button" class="btn-close shadow-none ms-3 mb-auto mt-2" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="text-muted small fw-bold text-uppercase letter-spacing-1 mb-3" id="search-status">
+                        Suggested Products</p>
+                    <div class="row g-3" id="search-results-grid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabaseClient.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

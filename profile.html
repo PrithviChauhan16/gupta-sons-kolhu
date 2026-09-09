@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Gupta Sons Kolhu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Supabase CDN JS Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabaseClient.js"></script>
+    <style>
+        .profile-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border-light);
+        }
+
+        .data-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #888;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .data-value {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-main);
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg sticky-top bg-white border-bottom shadow-sm">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="navbar-brand" href="index.html">GUPTA SONS KOLHU</a>
+            <div class="header-icons">
+                <a href="index.html" class="btn btn-sm btn-outline-custom w-auto px-4 m-0"><i
+                        class="fa-solid fa-arrow-left me-2"></i>Store</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5 min-vh-100 fade-transition" id="profile-container" style="opacity: 0;">
+        <h1 class="mb-5 fw-bold text-center text-dark">My Account</h1>
+        <div class="row g-4">
+
+            <!-- User Details Section -->
+            <div class="col-lg-4">
+                <div class="profile-card h-100 d-flex flex-column">
+                    <h5 class="fw-bold mb-4 border-bottom pb-3"><i
+                            class="fa-regular fa-id-badge me-2 text-primary-accent"></i> Profile Details</h5>
+
+                    <div class="data-label">Full Name</div>
+                    <div class="data-value" id="profileName">-</div>
+
+                    <div class="data-label">Email Address</div>
+                    <div class="data-value" id="profileEmail">-</div>
+
+                    <div class="data-label">Mobile Number</div>
+                    <div class="data-value" id="profileMobile">-</div>
+
+                    <div class="data-label">Delivery Address</div>
+                    <div class="data-value mb-4" id="profileAddress" style="line-height: 1.5;">-</div>
+
+                    <button class="btn btn-outline-danger w-100 py-2 fw-medium mt-auto" onclick="logoutUser()">
+                        <i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Log Out
+                    </button>
+                </div>
+            </div>
+
+            <!-- Order History Section -->
+            <div class="col-lg-8">
+                <div class="profile-card h-100">
+                    <h5 class="fw-bold mb-4 border-bottom pb-3"><i class="fa-solid fa-box me-2 text-primary-accent"></i>
+                        Order History</h5>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Items</th>
+                                    <th>Total Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="user-orders-list">
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted py-4">Loading orders...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="no-orders-msg" class="text-center py-5 d-none">
+                        <i class="fa-solid fa-box-open fs-1 text-muted mb-3"></i>
+                        <h6 class="text-muted fw-normal">You haven't placed any orders yet.</h6>
+                        <a href="index.html#shop" class="btn btn-sm btn-custom mt-3 px-4">Start Shopping</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <div class="container text-center border-top border-secondary pt-4">
+            <p class="text-muted mb-0">Copyright &copy; 2026 Gupta Sons Kolhu. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            let userData = null;
+            let userId = null;
+
+            if (typeof supabaseClient !== 'undefined') {
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                if (session?.user) {
+                    const user = session.user;
+                    userId = user.id;
+
+                    // Query profiles table with exact database column names
+                    const { data: profile } = await supabaseClient
+                        .from('profiles')
+                        .select('full_name, mobile_number, delivery_address')
+                        .eq('id', user.id)
+                        .maybeSingle();
+
+                    userData = {
+                        name: profile?.full_name || user.user_metadata?.full_name || user.email.split('@')[0],
+                        email: user.email,
+                        mobile: profile?.mobile_number || user.user_metadata?.phone || user.phone || 'N/A',
+                        address: profile?.delivery_address || user.user_metadata?.address || 'N/A'
+                    };
+                }
+            }
+
+            // Local Session Fallback
+            if (!userData) {
+                const isLoggedIn = sessionStorage.getItem('gsk_user_logged_in');
+                if (isLoggedIn === 'true') {
+                    const userEmail = sessionStorage.getItem('gsk_current_user');
+                    if (userEmail) {
+                        const localInfo = JSON.parse(localStorage.getItem('gsk_user_' + userEmail)) || {};
+                        userData = {
+                            name: localInfo.name || localInfo.full_name || userEmail.split('@')[0],
+                            email: userEmail,
+                            mobile: localInfo.mobile || localInfo.mobile_number || 'N/A',
+                            address: localInfo.address || localInfo.delivery_address || 'N/A'
+                        };
+                    }
+                }
+            }
+
+            if (!userData) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Populate User Details
+            document.getElementById('profileName').innerText = userData.name || '-';
+            document.getElementById('profileEmail').innerText = userData.email || '-';
+            document.getElementById('profileMobile').innerText = userData.mobile || '-';
+            document.getElementById('profileAddress').innerText = userData.address || '-';
+
+            // Fetch and Render User Orders
+            await fetchAndRenderOrders(userId, userData.email);
+
+            const container = document.getElementById('profile-container');
+            if (container) {
+                container.style.transition = 'opacity 0.5s ease';
+                container.style.opacity = '1';
+            }
+        });
+
+        async function fetchAndRenderOrders(userId, email) {
+            const tableBody = document.getElementById('user-orders-list');
+            const noOrdersMsg = document.getElementById('no-orders-msg');
+            let orders = [];
+
+            if (typeof supabaseClient !== 'undefined') {
+                try {
+                    let query = supabaseClient
+                        .from('orders')
+                        .select(`
+                    *,
+                    order_items (
+                        id,
+                        quantity,
+                        products (
+                            title
+                        )
+                    )
+                `)
+                        .order('created_at', { ascending: false });
+
+                    if (userId) {
+                        query = query.eq('user_id', userId);
+                    } else if (email) {
+                        query = query.eq('customer_email', email);
+                    }
+
+                    const { data, error } = await query;
+                    if (error) {
+                        console.error("Supabase Order Fetch Error:", error.message || error);
+                    } else if (data) {
+                        orders = data;
+                    }
+                } catch (err) {
+                    console.error("Error fetching orders:", err);
+                }
+            }
+
+            // Fallback to local storage if DB returns empty
+            if (orders.length === 0 && email) {
+                const localOrders = JSON.parse(localStorage.getItem('gsk_orders_' + email)) || [];
+                orders = localOrders;
+            }
+
+            if (orders.length === 0) {
+                tableBody.innerHTML = '';
+                if (noOrdersMsg) noOrdersMsg.classList.remove('d-none');
+                return;
+            }
+
+            if (noOrdersMsg) noOrdersMsg.classList.add('d-none');
+
+            tableBody.innerHTML = orders.map(order => {
+                const orderId = order.id ? `#${String(order.id).slice(0, 8)}` : (order.order_id || '#N/A');
+                const orderDate = order.created_at ? new Date(order.created_at).toLocaleDateString('en-IN', {
+                    day: 'numeric', month: 'short', year: 'numeric'
+                }) : 'N/A';
+                const totalAmount = order.total_amount || order.amount || order.total || '0';
+                const status = order.status || order.order_status || 'Processing';
+
+                let statusBadge = 'bg-secondary';
+                if (status.toLowerCase() === 'completed' || status.toLowerCase() === 'delivered' || status.toLowerCase() === 'paid') {
+                    statusBadge = 'bg-success';
+                } else if (status.toLowerCase() === 'processing' || status.toLowerCase() === 'pending') {
+                    statusBadge = 'bg-warning text-dark';
+                } else if (status.toLowerCase() === 'cancelled') {
+                    statusBadge = 'bg-danger';
+                }
+
+                let itemsHTML = '<span class="text-muted small">No items</span>';
+                if (order.order_items && order.order_items.length > 0) {
+                    itemsHTML = order.order_items.map(item => `
+                <div class="small fw-medium text-dark">
+                    • ${item.products?.title || 'Product'} <span class="text-muted">(x${item.quantity})</span>
+                </div>
+            `).join('');
+                } else if (order.items && order.items.length > 0) {
+                    itemsHTML = order.items.map(i => `
+                <div class="small fw-medium text-dark">• ${i.title || 'Product'} <span class="text-muted">(x${i.quantity})</span></div>
+            `).join('');
+                }
+
+                return `
+            <tr>
+                <td>
+                    <span class="fw-bold">${orderId}</span><br>
+                    <small class="text-muted">${orderDate}</small>
+                </td>
+                <td>${itemsHTML}</td>
+                <td class="fw-bold">Rs. ${parseFloat(totalAmount).toFixed(2)}</td>
+                <td><span class="badge ${statusBadge}">${status}</span></td>
+            </tr>
+        `;
+            }).join('');
+        }
+
+        async function logoutUser() {
+            if (typeof supabaseClient !== 'undefined') {
+                await supabaseClient.auth.signOut();
+            }
+            sessionStorage.removeItem('gsk_user_logged_in');
+            sessionStorage.removeItem('gsk_current_user');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+
+</html>

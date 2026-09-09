@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart - Gupta Sons Kolhu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .cart-header {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 30px 0;
+        }
+
+        .cart-item {
+            border-bottom: 1px solid var(--border-light);
+            padding: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .cart-item:hover {
+            background-color: rgba(255, 255, 255, 0.5);
+            padding-left: 10px;
+            border-radius: 8px;
+            border-bottom-color: transparent;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+        }
+
+        .cart-img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            background: #f4f4f4;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .item-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: var(--text-main);
+        }
+
+        .item-price {
+            color: var(--text-main);
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .remove-btn {
+            color: #888;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            background: transparent;
+            padding: 0;
+            transition: 0.3s;
+        }
+
+        .remove-btn:hover {
+            color: #dc3545;
+            transform: translateX(3px);
+        }
+
+        .qty-input {
+            width: 60px;
+            text-align: center;
+            border: 1px solid var(--border-light);
+            padding: 5px;
+            border-radius: 4px;
+        }
+
+        .summary-card {
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+        }
+
+        .summary-total {
+            font-weight: 700;
+            font-size: 1.3rem;
+            border-top: 1px solid var(--border-light);
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+
+        .phonepe-btn {
+            background-color: #5f259f;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .phonepe-btn:hover {
+            background-color: #4b1d7d;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 576px) {
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start !important;
+                gap: 15px;
+            }
+
+            .cart-img {
+                width: 100%;
+                height: 200px;
+                margin: 0 !important;
+            }
+
+            .mobile-qty-price-row {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg" id="main-nav">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="navbar-brand" href="index.html">GUPTA SONS KOLHU</a>
+            <div class="header-icons">
+                <a href="profile.html" style="color: inherit;" title="Account"><i class="fa-regular fa-user"></i></a>
+                <a href="cart.html" style="color: inherit;" class="position-relative">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span id="cart-badge"
+                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-white"
+                        style="display: none; background-color: var(--badge-red);">0</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4 min-vh-100">
+        <h1 class="cart-header text-center">Your Cart</h1>
+        <div class="row g-4" id="main-cart-content">
+            <!-- Dynamic Cart Items Container -->
+            <div class="col-lg-8" id="cart-items-container">
+                <!-- Items will be injected here via JavaScript -->
+            </div>
+
+            <div class="col-lg-4">
+                <div class="summary-card">
+                    <h3 class="fs-5 fw-bold mb-4 border-bottom pb-2">Order Summary</h3>
+                    <div class="d-flex justify-content-between mb-2 text-muted"><span>Subtotal</span><span
+                            class="text-dark fw-medium" id="subtotal-price">Rs. 0.00</span></div>
+                    <div class="d-flex justify-content-between mb-2 text-muted"><span>Shipping</span><span
+                            class="text-success fw-bold" id="shipping-status">—</span></div>
+                    <div class="summary-total d-flex justify-content-between"><span>Total</span><span
+                            id="total-price">Rs. 0.00</span></div>
+
+                    <!-- Profile Verification Alert -->
+                    <div class="alert alert-warning border-0 shadow-sm mt-4 mb-2 small text-dark d-flex align-items-start rounded-3"
+                        role="alert">
+                        <i class="fa-solid fa-triangle-exclamation text-warning fs-5 me-2 mt-1"></i>
+                        <div>
+                            Please verify your <strong>delivery address</strong> and <strong>mobile number</strong> in
+                            your <a href="profile.html" class="alert-link text-decoration-underline">Profile Page</a>
+                            before proceeding.
+                        </div>
+                    </div>
+
+                    <button class="btn-custom w-100 mt-2" id="checkout-btn" disabled
+                        style="opacity: 0.5; cursor: not-allowed;">Proceed to Checkout <i
+                            class="fa-solid fa-arrow-right ms-2"></i></button>
+                    <p id="checkout-warning" class="text-danger small text-center mt-3 d-none fw-medium fade show">You
+                        must be logged in to place an order.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+                <div class="modal-header border-0 bg-light pb-3">
+                    <h5 class="modal-title fw-bold text-dark w-100 text-center">Secure Payment</h5>
+                    <button type="button" class="btn-close shadow-none position-absolute" style="right:20px;"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center py-5 px-4">
+                    <p class="text-muted mb-1 text-uppercase letter-spacing-1 small fw-bold">Amount to Pay</p>
+                    <h2 class="fw-bold mb-4 text-dark" id="modal-total-display" style="font-size: 2.5rem;">Rs. 0.00</h2>
+
+                    <button class="phonepe-btn shadow-sm" id="phonepe-btn">
+                        <i class="fa-solid fa-shield-halved"></i> Pay via PhonePe
+                    </button>
+
+                    <div id="payment-loader" class="d-none mt-4">
+                        <div class="spinner-border" role="status" style="color: #5f259f; width: 3rem; height: 3rem;">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="text-muted mt-3 fw-medium">Processing securely. Please do not close.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabaseClient.js"></script>
+
+    <script>
+        let currentUserSession = null;
+        let currentUserProfile = null;
+        let loadedCartItems = [];
+        let rawTotalNumeric = 0;
+
+        async function checkAuthStatus() {
+            try {
+                if (typeof supabaseClient !== 'undefined') {
+                    const { data: { session } } = await supabaseClient.auth.getSession();
+                    currentUserSession = session;
+
+                    if (session && session.user) {
+                        const { data: profile } = await supabaseClient
+                            .from('profiles')
+                            .select('*')
+                            .eq('id', session.user.id)
+                            .maybeSingle();
+
+                        currentUserProfile = profile;
+                    }
+                }
+            } catch (err) {
+                console.error("Auth check failed:", err);
+            }
+        }
+
+        async function fetchCartData() {
+            if (currentUserSession && currentUserSession.user) {
+                try {
+                    const { data: dbItems, error } = await supabaseClient
+                        .from('cart_items')
+                        .select('*')
+                        .eq('user_id', currentUserSession.user.id);
+
+                    if (!error && dbItems && dbItems.length > 0) {
+                        const productIds = dbItems.map(item => item.product_id);
+                        const { data: products } = await supabaseClient
+                            .from('products')
+                            .select('*')
+                            .in('id', productIds);
+
+                        const productMap = new Map((products || []).map(p => [String(p.id), p]));
+
+                        return dbItems.map(item => {
+                            const prod = productMap.get(String(item.product_id)) || {};
+                            return {
+                                db_id: item.id,
+                                id: item.product_id,
+                                title: prod.title || 'Product Item',
+                                price: prod.price || 0,
+                                image: prod.image_url || prod.image || '',
+                                category: prod.category_id || prod.category || 'General',
+                                quantity: item.quantity
+                            };
+                        });
+                    }
+                } catch (err) {
+                    console.error("Failed to fetch database cart items:", err);
+                }
+            }
+
+            const cartKey = currentUserSession?.user ? `gsk_cart_${currentUserSession.user.id}` : 'gsk_cart_guest';
+            return JSON.parse(localStorage.getItem(cartKey)) || [];
+        }
+
+        async function loadCartItems() {
+            const container = document.getElementById('cart-items-container');
+            loadedCartItems = await fetchCartData();
+
+            container.innerHTML = '';
+
+            const totalItems = loadedCartItems.reduce((sum, item) => sum + item.quantity, 0);
+            const badge = document.getElementById('cart-badge');
+            if (badge) {
+                if (totalItems > 0) {
+                    badge.innerText = totalItems;
+                    badge.style.display = 'inline-block';
+                } else {
+                    badge.style.display = 'none';
+                }
+            }
+
+            if (loadedCartItems.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-5">
+                        <h3 class="fw-normal mb-4 text-muted">Your cart is feeling light.</h3>
+                        <a href="index.html" class="btn-custom d-inline-block w-auto px-5" style="border-radius:30px;">Explore Store</a>
+                    </div>`;
+                document.getElementById('shipping-status').innerText = '—';
+                document.getElementById('subtotal-price').innerText = 'Rs. 0.00';
+                document.getElementById('total-price').innerText = 'Rs. 0.00';
+                document.getElementById('modal-total-display').innerText = 'Rs. 0.00';
+
+                const btn = document.getElementById('checkout-btn');
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+                btn.style.cursor = 'not-allowed';
+                rawTotalNumeric = 0;
+                return;
+            }
+
+            let totalAmount = 0;
+
+            loadedCartItems.forEach(item => {
+                const linePrice = parseFloat(item.price) * item.quantity;
+                totalAmount += linePrice;
+
+                container.innerHTML += `
+                    <div class="cart-item d-flex align-items-center" data-id="${item.id}">
+                        <img src="${item.image || ''}" alt="${item.title}" class="cart-img me-4">
+                        <div class="flex-grow-1 w-100">
+                            <div class="item-title">${item.title}</div>
+                            <div class="text-muted small mb-2 text-capitalize">Category: ${item.category || 'General'}</div>
+                            <button class="remove-btn mt-1" onclick="removeFromCart('${item.id}', '${item.db_id || ''}')"><i class="fa-solid fa-xmark me-1"></i> Remove</button>
+                        </div>
+                        <div class="mobile-qty-price-row mt-3 mt-sm-0 ms-sm-4">
+                            <input type="number" class="qty-input me-3 shadow-sm" value="${item.quantity}" min="1" onchange="updateQuantity('${item.id}', '${item.db_id || ''}', this.value)">
+                            <div class="item-price fw-bold">Rs. ${linePrice.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML += `<a href="index.html" class="d-inline-block mt-4 text-muted border-bottom border-secondary pb-1" style="font-weight: 500;"><i class="fa-solid fa-arrow-left me-2"></i>Continue Shopping</a>`;
+
+            rawTotalNumeric = totalAmount;
+            const formattedTotal = 'Rs. ' + totalAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+            document.getElementById('subtotal-price').innerText = formattedTotal;
+            document.getElementById('total-price').innerText = formattedTotal;
+            document.getElementById('modal-total-display').innerText = formattedTotal;
+            document.getElementById('shipping-status').innerText = 'Free';
+
+            const btn = document.getElementById('checkout-btn');
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            btn.style.cursor = 'pointer';
+        }
+
+        async function removeFromCart(productId, dbId) {
+            if (currentUserSession && currentUserSession.user && dbId) {
+                await supabaseClient.from('cart_items').delete().eq('id', dbId);
+            } else {
+                const cartKey = currentUserSession?.user ? `gsk_cart_${currentUserSession.user.id}` : 'gsk_cart_guest';
+                let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+                cart = cart.filter(item => String(item.id) !== String(productId));
+                localStorage.setItem(cartKey, JSON.stringify(cart));
+            }
+            await loadCartItems();
+        }
+
+        async function updateQuantity(productId, dbId, newQty) {
+            const qty = Math.max(1, parseInt(newQty) || 1);
+            if (currentUserSession && currentUserSession.user && dbId) {
+                await supabaseClient.from('cart_items').update({ quantity: qty }).eq('id', dbId);
+            } else {
+                const cartKey = currentUserSession?.user ? `gsk_cart_${currentUserSession.user.id}` : 'gsk_cart_guest';
+                let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+                const item = cart.find(i => String(i.id) === String(productId));
+                if (item) {
+                    item.quantity = qty;
+                    localStorage.setItem(cartKey, JSON.stringify(cart));
+                }
+            }
+            await loadCartItems();
+        }
+
+        async function clearCartAfterOrder() {
+            if (currentUserSession && currentUserSession.user) {
+                await supabaseClient.from('cart_items').delete().eq('user_id', currentUserSession.user.id);
+            } else {
+                localStorage.removeItem('gsk_cart_guest');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await checkAuthStatus();
+            await loadCartItems();
+
+            const paymentModalElement = document.getElementById('paymentModal');
+            const paymentModal = paymentModalElement ? new bootstrap.Modal(paymentModalElement) : null;
+
+            document.getElementById('checkout-btn').addEventListener('click', function () {
+                if (currentUserSession) {
+                    if (paymentModal) paymentModal.show();
+                } else {
+                    const warning = document.getElementById('checkout-warning');
+                    if (warning) warning.classList.remove('d-none');
+                    setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+                }
+            });
+
+            document.getElementById('phonepe-btn').addEventListener('click', async function () {
+                const payBtn = this;
+                const loader = document.getElementById('payment-loader');
+
+                payBtn.classList.add('d-none');
+                if (loader) loader.classList.remove('d-none');
+
+                const displayTotal = document.getElementById('total-price').innerText;
+
+                // Ensure fresh session retrieval
+                let userId = currentUserSession?.user?.id || null;
+                let userEmail = currentUserSession?.user?.email || sessionStorage.getItem('gsk_current_user') || null;
+
+                if (typeof supabaseClient !== 'undefined' && !userId) {
+                    const { data: { session } } = await supabaseClient.auth.getSession();
+                    if (session?.user) {
+                        userId = session.user.id;
+                        userEmail = session.user.email;
+                    }
+                }
+
+                const customerName = currentUserProfile?.full_name || currentUserSession?.user?.user_metadata?.full_name || "Valued Customer";
+                const customerMobile = currentUserProfile?.mobile_number || currentUserSession?.user?.user_metadata?.phone || "N/A";
+                const shippingAddress = currentUserProfile?.delivery_address || currentUserSession?.user?.user_metadata?.address || "N/A";
+
+                const generatedTxnId = 'TXN_' + Date.now();
+                const generatedOrderId = 'GSK-' + Math.floor(Math.random() * 900000 + 100000);
+
+                // 1. Database Payload matching single 'orders' table schema with items stored directly inside
+                const supabaseDbOrder = {
+                    user_id: userId,
+                    customer_name: customerName,
+                    customer_email: userEmail,
+                    customer_mobile: customerMobile,
+                    delivery_address: shippingAddress,
+                    total_amount: rawTotalNumeric,
+                    order_status: 'Paid',
+                    phonepe_transaction_id: generatedTxnId,
+                    items: loadedCartItems
+                };
+
+                let createdSupabaseOrderId = null;
+
+                // 2. Save directly to Supabase orders table
+                if (typeof supabaseClient !== 'undefined') {
+                    try {
+                        const { data: insertedOrder, error: orderError } = await supabaseClient
+                            .from('orders')
+                            .insert([supabaseDbOrder])
+                            .select('id')
+                            .single();
+
+                        if (orderError) {
+                            console.error("Supabase Order save failed:", orderError.message, orderError.details);
+                            alert("Database Sync Alert: " + orderError.message);
+                            payBtn.classList.remove('d-none');
+                            if (loader) loader.classList.add('d-none');
+                            return;
+                        }
+
+                        if (insertedOrder) {
+                            createdSupabaseOrderId = insertedOrder.id;
+                        }
+                    } catch (err) {
+                        console.error("Unexpected error saving order to Supabase:", err);
+                        payBtn.classList.remove('d-none');
+                        if (loader) loader.classList.add('d-none');
+                        return;
+                    }
+                }
+
+                // 3. Local Storage Payload (Fallback & Local Sync)
+                const localOrder = {
+                    order_id: createdSupabaseOrderId || generatedOrderId,
+                    id: createdSupabaseOrderId || generatedOrderId,
+                    user_id: userId,
+                    date: new Date().toLocaleDateString('en-IN') + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                    created_at: new Date().toISOString(),
+                    name: customerName,
+                    customer_email: userEmail,
+                    mobile: customerMobile,
+                    address: shippingAddress,
+                    total_amount: rawTotalNumeric,
+                    amount: displayTotal,
+                    items: loadedCartItems,
+                    order_status: 'Paid',
+                    phonepe_transaction_id: generatedTxnId
+                };
+
+                // 4. Save to LocalStorage
+                if (userEmail) {
+                    let userOrders = JSON.parse(localStorage.getItem('gsk_orders_' + userEmail)) || [];
+                    userOrders.unshift(localOrder);
+                    localStorage.setItem('gsk_orders_' + userEmail, JSON.stringify(userOrders));
+                }
+
+                let globalOrders = JSON.parse(localStorage.getItem('gsk_orders')) || [];
+                globalOrders.unshift(localOrder);
+                localStorage.setItem('gsk_orders', JSON.stringify(globalOrders));
+
+                localStorage.setItem('gsk_latest_order', JSON.stringify(localOrder));
+
+                // 5. Cleanup Cart and Redirect
+                await clearCartAfterOrder();
+
+                setTimeout(() => {
+                    window.location.href = 'confirmation.html';
+                }, 1500);
+            });
+        });
+    </script>
+</body>
+
+</html>

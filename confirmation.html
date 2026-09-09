@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed - Gupta Sons Kolhu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #FAF8F5; --text-main: #2B2B2B; --primary-accent: #9A5A1A; --border-light: #E8E5DF; }
+        body { font-family: 'Jost', sans-serif; background-color: var(--bg-color); color: var(--text-main); -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; min-height: 100vh; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        
+        .navbar { padding: 1.2rem 0; background-color: var(--bg-color) !important; border-bottom: 1px solid var(--border-light); }
+        .navbar-brand { font-weight: 700; font-size: 1.8rem; letter-spacing: 1px; color: var(--text-main); }
+
+        .success-icon { font-size: 5rem; color: #28a745; margin-bottom: 20px; animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: inline-block; }
+        
+        .details-card { background: #fff; border: none; border-radius: 12px; padding: 35px 40px; margin-top: 25px; text-align: left; max-width: 520px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.05); animation: slideUp 0.6s ease; transition: transform 0.3s ease; }
+        .details-card:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(0,0,0,0.08); }
+        .details-card h5 { border-bottom: 2px solid #f1f1f1; padding-bottom: 15px; margin-bottom: 20px; font-weight: 600; color: var(--primary-accent); }
+        
+        .btn-custom { background-color: var(--text-main); color: #fff; border: none; padding: 14px 35px; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; border-radius: 30px; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: inline-block; box-shadow: 0 4px 15px rgba(0,0,0,0.1); animation: fadeIn 1s ease 0.5s both; }
+        .btn-custom:hover { background-color: var(--primary-accent); color: white; transform: translateY(-3px); box-shadow: 0 8px 20px rgba(154,90,26,0.3); }
+        .btn-custom:active { transform: scale(0.97); }
+
+        @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 80% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); } }
+        @keyframes slideUp { 0% { transform: translateY(40px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container d-flex justify-content-center align-items-center">
+            <a class="navbar-brand m-0" href="index.html">GUPTA SONS KOLHU</a>
+        </div>
+    </nav>
+
+    <div class="container flex-grow-1 d-flex flex-column align-items-center justify-content-center py-5 text-center">
+        
+        <i class="fa-solid fa-circle-check success-icon"></i>
+        <h1 class="fw-bold mb-2 text-dark" style="animation: fadeIn 0.8s ease;">Payment Successful!</h1>
+        <p class="fs-5 text-muted mb-2" style="animation: fadeIn 1s ease;">Thank you! Your order has been securely placed.</p>
+        
+        <div class="details-card mx-auto">
+            <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
+                <h5 class="m-0 border-0 p-0">Order Summary</h5>
+                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 rounded-pill small" id="conf-status">Processing</span>
+            </div>
+
+            <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
+                <span class="text-muted"><i class="fa-solid fa-hashtag me-2"></i>Order ID</span>
+                <span class="text-dark fw-bold text-end" id="conf-id">#GSK-000000</span>
+            </div>
+            <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
+                <span class="text-muted"><i class="fa-solid fa-indian-rupee-sign me-2"></i>Amount Paid</span>
+                <span class="text-success fw-bold text-end" id="conf-amount">Rs. 0.00</span>
+            </div>
+            <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
+                <span class="text-muted"><i class="fa-regular fa-user me-2"></i>Recipient Name</span>
+                <span class="text-dark fw-medium text-end" id="conf-name">Valued Customer</span>
+            </div>
+            <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
+                <span class="text-muted"><i class="fa-solid fa-phone me-2"></i>Phone</span>
+                <span class="text-dark fw-medium text-end" id="conf-mobile">N/A</span>
+            </div>
+            <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
+                <span class="text-muted"><i class="fa-solid fa-location-dot me-2"></i>Address</span>
+                <span class="text-dark fw-medium text-end" id="conf-address" style="max-width: 60%; text-align: right;">N/A</span>
+            </div>
+            <div class="d-flex justify-content-between">
+                <span class="text-muted"><i class="fa-regular fa-calendar-check me-2"></i>Order Date</span>
+                <span class="text-dark fw-medium text-end" id="conf-date">—</span>
+            </div>
+        </div>
+
+        <div class="d-flex flex-wrap justify-content-center gap-3 mt-4">
+            <a href="profile.html" class="btn-custom"><i class="fa-solid fa-box-open me-2"></i> View Order History</a>
+            <a href="index.html" class="btn btn-outline-dark px-4 py-3 rounded-pill fw-semibold text-uppercase style-store-btn" style="letter-spacing: 1px;"><i class="fa-solid fa-store me-2"></i> Return to Store</a>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const latestOrder = JSON.parse(localStorage.getItem('gsk_latest_order'));
+
+            if (latestOrder) {
+                document.getElementById('conf-id').innerText = '#' + (latestOrder.order_id || latestOrder.id || 'GSK-000000');
+                document.getElementById('conf-amount').innerText = latestOrder.amount || 'Rs. 0.00';
+                document.getElementById('conf-name').innerText = latestOrder.name || 'Valued Customer';
+                document.getElementById('conf-mobile').innerText = latestOrder.mobile || 'N/A';
+                document.getElementById('conf-address').innerText = latestOrder.address || 'N/A';
+                document.getElementById('conf-date').innerText = latestOrder.date || new Date().toLocaleDateString();
+                if (latestOrder.status) {
+                    document.getElementById('conf-status').innerText = latestOrder.status;
+                }
+            } else {
+                // Fallback if accessed without an active order
+                document.getElementById('conf-id').innerText = '#GSK-RECENT';
+                document.getElementById('conf-name').innerText = 'Valued Customer';
+            }
+        });
+    </script>
+</body>
+</html>

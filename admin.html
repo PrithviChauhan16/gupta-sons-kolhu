@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Gupta Sons Kolhu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Supabase JS Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabaseClient.js"></script>
+
+    <style>
+        body {
+            font-family: 'Jost', sans-serif;
+            background-color: #f4f6f9;
+            color: #2B2B2B;
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            height: 100vh;
+            background-color: #1a1a1a;
+            color: white;
+            padding-top: 20px;
+            position: fixed;
+            width: 250px;
+            z-index: 1000;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar h4 {
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .sidebar a {
+            color: #aaa;
+            text-decoration: none;
+            display: block;
+            padding: 15px 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            color: #fff;
+            background-color: #2b2b2b;
+            border-left: 4px solid #9A5A1A;
+            padding-left: 25px;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+        }
+
+        .btn-custom {
+            background-color: #9A5A1A;
+            color: white;
+            border: none;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .btn-custom:hover {
+            background-color: #7a4613;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(154, 90, 26, 0.3);
+        }
+
+        .btn-custom:active {
+            transform: scale(0.97);
+        }
+
+        input.form-control,
+        select.form-select {
+            transition: all 0.3s ease;
+            border-radius: 6px;
+        }
+
+        input.form-control:focus,
+        select.form-select:focus {
+            box-shadow: 0 0 0 3px rgba(154, 90, 26, 0.1);
+            border-color: #9A5A1A;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 10px 0;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                flex-wrap: wrap;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            }
+
+            .sidebar h4 {
+                display: none;
+            }
+
+            .sidebar a {
+                padding: 10px;
+                font-size: 0.85rem;
+                border-left: none;
+                text-align: center;
+                border-bottom: 3px solid transparent;
+                flex: 1;
+                min-width: 25%;
+            }
+
+            .sidebar a:hover,
+            .sidebar a.active {
+                border-left: none;
+                border-bottom: 3px solid #9A5A1A;
+                padding-left: 10px;
+                padding-bottom: 15px;
+            }
+
+            .sidebar a i {
+                display: block;
+                font-size: 1.2rem;
+                margin-bottom: 5px;
+                margin-right: 0 !important;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px 15px;
+            }
+        }
+
+        .product-thumbnail {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.4s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="dashboard-section" class="d-none flex-column flex-md-row fade-in">
+        <div class="sidebar d-flex flex-md-column">
+            <h4 class="text-center mb-4 pb-3 border-bottom border-secondary d-none d-md-block text-uppercase">GSK Admin</h4>
+            <a id="nav-orders" class="active" onclick="showView('orders')"><i class="fa-solid fa-box me-2"></i> Orders</a>
+            <a id="nav-categories" onclick="showView('categories')"><i class="fa-solid fa-tags me-2"></i> Categories</a>
+            <a id="nav-messages" onclick="showView('messages')"><i class="fa-solid fa-envelope me-2"></i> Messages</a>
+            <a id="nav-add" onclick="showView('add')"><i class="fa-solid fa-plus me-2"></i> Add Product</a>
+            <a id="nav-manage" onclick="showView('manage')"><i class="fa-solid fa-list-check me-2"></i> Products</a>
+            <a href="index.html"><i class="fa-solid fa-store me-2"></i> Store</a>
+            <a onclick="logoutAdmin()" class="mt-md-auto text-danger"><i class="fa-solid fa-right-from-bracket me-2"></i> Logout</a>
+        </div>
+
+        <div class="main-content w-100">
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center mb-4 gap-3">
+                <h2 class="fs-3 m-0 fw-bold text-dark" id="admin-page-title">Recent Orders</h2>
+                <span class="badge bg-success px-3 py-2 rounded-pill shadow-sm">System Online</span>
+            </div>
+
+            <!-- Orders View -->
+            <div id="orders-view" class="card p-3 p-md-4 mx-auto fade-in" style="max-width: 1000px;">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Delivery Address</th>
+                                <th>Items</th>
+                                <th>Total Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-order-list"></tbody>
+                    </table>
+                </div>
+                <div id="orders-empty" class="text-center py-5 d-none text-muted">
+                    <i class="fa-solid fa-box-open fs-1 mb-3"></i>
+                    <h5>No orders found in database.</h5>
+                </div>
+            </div>
+
+            <!-- Messages View -->
+            <div id="messages-view" class="card p-3 p-md-4 mx-auto d-none fade-in" style="max-width: 1000px;">
+                <div class="row g-4" id="admin-message-list"></div>
+                <div id="messages-empty" class="text-center py-5 d-none text-muted">
+                    <i class="fa-regular fa-comments fs-1 mb-3"></i>
+                    <h5>No messages found.</h5>
+                </div>
+            </div>
+
+            <!-- Categories View -->
+            <div id="categories-view" class="card p-3 p-md-4 mx-auto d-none fade-in" style="max-width: 900px;">
+                <form id="addCategoryForm" class="mb-4">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-5">
+                            <label class="form-label small text-muted fw-bold">Category Name (e.g., Peanut Oil)</label>
+                            <input type="text" id="catName" class="form-control" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small text-muted fw-bold">Category Image File</label>
+                            <input type="file" id="catImageFile" class="form-control" accept="image/*" required>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-custom w-100 py-2" id="catSubmitBtn">Add Category</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle border-top">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Image</th>
+                                <th>Category Name</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-category-list"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Add Product View -->
+            <div id="add-view" class="card p-3 p-md-4 mx-auto d-none fade-in" style="max-width: 800px;">
+                <form id="addProductForm">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small text-muted">Product Title</label>
+                            <input type="text" class="form-control" id="prodTitle" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small text-muted">Price (₹)</label>
+                            <input type="number" step="0.01" class="form-control" id="prodPrice" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small text-muted">Category</label>
+                            <select class="form-select text-capitalize" id="prodCategory" required>
+                                <!-- Categories populated via JS -->
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small text-muted">Product Tag/Badge</label>
+                            <select class="form-select" id="prodBadge">
+                                <option value="None">None</option>
+                                <option value="Selling Fast">Selling Fast (Red)</option>
+                                <option value="Best Seller">Best Seller (Black)</option>
+                                <option value="Sold Out">Sold Out (Grey)</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold small text-muted">Product Description</label>
+                            <textarea class="form-control" id="prodDesc" rows="3" placeholder="Enter full product details..." required></textarea>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold small text-muted">Product Images</label>
+                            <input type="file" class="form-control" id="prodImageFile" accept="image/*" multiple required>
+                            <small class="text-muted">First image selected will be used as the main cover photo.</small>
+                        </div>
+                    </div>
+                    <div class="alert alert-success mt-4 d-none small shadow-sm" id="successMsg">Product added successfully!</div>
+                    <button type="submit" class="btn btn-custom w-100 mt-4 py-3 fw-bold rounded" id="adminSubmitBtn">Add Product to Store</button>
+                </form>
+            </div>
+
+            <!-- Manage Products View -->
+            <div id="manage-view" class="card p-3 p-md-4 mx-auto d-none fade-in" style="max-width: 900px;">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle border-top">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Image</th>
+                                <th>Title</th>
+                                <th>Price</th>
+                                <th>Category</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-product-list"></tbody>
+                    </table>
+                </div>
+                <div id="empty-state" class="text-center py-5 d-none text-muted">
+                    <i class="fa-solid fa-box-open fs-1 mb-3"></i>
+                    <h5>No products found in database.</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Product Modal -->
+    <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="editProductModalLabel">Edit Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProductForm">
+                        <input type="hidden" id="editProdId">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small text-muted">Product Title</label>
+                                <input type="text" class="form-control" id="editProdTitle" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small text-muted">Price (₹)</label>
+                                <input type="number" step="0.01" class="form-control" id="editProdPrice" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small text-muted">Category</label>
+                                <select class="form-select text-capitalize" id="editProdCategory" required>
+                                    <!-- Populated dynamically -->
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small text-muted">Product Tag/Badge</label>
+                                <select class="form-select" id="editProdBadge">
+                                    <option value="None">None</option>
+                                    <option value="Selling Fast">Selling Fast (Red)</option>
+                                    <option value="Best Seller">Best Seller (Black)</option>
+                                    <option value="Sold Out">Sold Out (Grey)</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-bold small text-muted">Product Description</label>
+                                <textarea class="form-control" id="editProdDesc" rows="3" required></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-bold small text-muted">Replace Product Image (Optional)</label>
+                                <input type="file" class="form-control" id="editProdImageFile" accept="image/*">
+                                <small class="text-muted">Leave empty if you want to keep the current image.</small>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-custom w-100 mt-4 py-2 fw-bold rounded" id="editSubmitBtn">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Secure Session & Database Authorization Check
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const { data: { user } } = await supabaseClient.auth.getUser();
+
+                if (!user) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                // Query database table for administrator role
+                const { data: roleData, error } = await supabaseClient
+                    .from('user_roles')
+                    .select('role')
+                    .eq('user_id', user.id)
+                    .single();
+
+                if (roleData && roleData.role === 'admin') {
+                    const dashboard = document.getElementById('dashboard-section');
+                    dashboard.classList.remove('d-none');
+                    dashboard.classList.add('d-flex');
+                    showView('orders');
+                } else {
+                    alert("Access Denied: You do not have administrator permissions.");
+                    window.location.href = 'login_2.html';
+                }
+            } catch (err) {
+                console.error("Authorization check failed:", err);
+                window.location.href = 'login_2.html';
+            }
+        });
+
+        async function logoutAdmin() {
+            await supabaseClient.auth.signOut();
+            sessionStorage.clear();
+            window.location.href = 'login_2.html';
+        }
+
+        function showView(viewName) {
+            ['orders', 'messages', 'categories', 'add', 'manage'].forEach(v => {
+                const viewEl = document.getElementById(v + '-view');
+                if (viewEl) viewEl.classList.add('d-none');
+
+                const navItem = document.getElementById('nav-' + v);
+                if (navItem) navItem.classList.remove('active');
+            });
+
+            const view = document.getElementById(viewName + '-view');
+            if (view) {
+                view.classList.remove('d-none');
+                view.classList.remove('fade-in');
+                void view.offsetWidth;
+                view.classList.add('fade-in');
+            }
+
+            const activeNav = document.getElementById('nav-' + viewName);
+            if (activeNav) activeNav.classList.add('active');
+
+            if (viewName === 'orders') {
+                document.getElementById('admin-page-title').innerText = "Recent Orders";
+                renderOrders();
+            } else if (viewName === 'messages') {
+                document.getElementById('admin-page-title').innerText = "Customer Messages";
+                renderMessages();
+            } else if (viewName === 'categories') {
+                document.getElementById('admin-page-title').innerText = "Manage Categories";
+                renderAdminCategories();
+            } else if (viewName === 'add') {
+                document.getElementById('admin-page-title').innerText = "Add New Product";
+                populateCategoryDropdown('prodCategory');
+            } else if (viewName === 'manage') {
+                document.getElementById('admin-page-title').innerText = "Manage Products";
+                renderAdminProducts();
+            }
+        }
+
+        // Upload file to Supabase Storage Bucket
+        async function uploadImageToStorage(file, path) {
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
+            const filePath = `${path}/${fileName}`;
+
+            const { error: uploadError } = await supabaseClient.storage
+                .from('product-images')
+                .upload(filePath, file);
+
+            if (uploadError) throw uploadError;
+
+            const { data } = supabaseClient.storage
+                .from('product-images')
+                .getPublicUrl(filePath);
+
+            return data.publicUrl;
+        }
+
+        // Fetch Orders using strictly the orders table
+        async function renderOrders() {
+            const tbody = document.getElementById('admin-order-list');
+            const emptyState = document.getElementById('orders-empty');
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4"><span class="spinner-border spinner-border-sm"></span> Loading orders...</td></tr>';
+
+            const { data: orders, error } = await supabaseClient
+                .from('orders')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            tbody.innerHTML = '';
+
+            if (error || !orders || orders.length === 0) {
+                if (error) console.error("Admin orders fetch error:", error.message || error);
+                emptyState.classList.remove('d-none');
+                tbody.parentElement.classList.add('d-none');
+                return;
+            }
+
+            emptyState.classList.add('d-none');
+            tbody.parentElement.classList.remove('d-none');
+
+            orders.forEach(o => {
+                const createdDate = new Date(o.created_at).toLocaleDateString('en-IN');
+                const address = o.delivery_address || o.shipping_address || 'No Address Provided';
+
+                let itemsSummary = '<span class="text-muted small">No items recorded</span>';
+
+                const rawItems = o.items || o.product_name || o.product_title || o.item_name;
+
+                if (rawItems) {
+                    let itemList = [];
+                    if (typeof rawItems === 'string') {
+                        try {
+                            itemList = JSON.parse(rawItems);
+                        } catch (e) {
+                            itemList = [{ title: rawItems, quantity: 1 }];
+                        }
+                    } else if (Array.isArray(rawItems)) {
+                        itemList = rawItems;
+                    } else if (typeof rawItems === 'object') {
+                        itemList = [rawItems];
+                    }
+
+                    if (Array.isArray(itemList) && itemList.length > 0) {
+                        itemsSummary = itemList.map(item => {
+                            const title = item.title || item.name || item.product_name || 'Product';
+                            const qty = item.quantity || item.qty || 1;
+                            return `<div class="small text-dark fw-medium">• ${title} <span class="text-muted">(x${qty})</span></div>`;
+                        }).join('');
+                    }
+                }
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td>
+                            <span class="fw-bold text-dark">#${o.id ? o.id.toString().substring(0, 8) : 'N/A'}</span><br>
+                            <small class="text-muted">${createdDate}</small>
+                        </td>
+                        <td class="fw-medium">
+                            ${o.customer_name || 'Customer'}<br>
+                            <small class="text-muted">${o.customer_mobile || ''}</small>
+                        </td>
+                        <td class="small text-secondary" style="max-width: 250px; word-wrap: break-word;">${address}</td>
+                        <td>${itemsSummary}</td>
+                        <td class="fw-bold" style="color: #9A5A1A;">₹${parseFloat(o.total_amount || 0).toFixed(2)}</td>
+                        <td><span class="badge bg-success shadow-sm rounded-pill px-2 py-1">${o.order_status || o.payment_status || 'Paid'}</span></td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Fetch Messages
+        async function renderMessages() {
+            const list = document.getElementById('admin-message-list');
+            const emptyState = document.getElementById('messages-empty');
+            list.innerHTML = '<div class="text-center py-4 w-100"><span class="spinner-border spinner-border-sm"></span> Loading messages...</div>';
+
+            const { data: messages, error } = await supabaseClient
+                .from('messages')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            list.innerHTML = '';
+
+            if (error || !messages || messages.length === 0) {
+                emptyState.classList.remove('d-none');
+                return;
+            }
+
+            emptyState.classList.add('d-none');
+
+            messages.forEach(m => {
+                const msgDate = new Date(m.created_at).toLocaleDateString('en-IN', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric'
+                });
+
+                const fullName = `${m.first_name || ''} ${m.last_name || ''}`.trim() || 'Customer';
+
+                list.innerHTML += `
+            <div class="col-md-6">
+                <div class="border rounded-3 p-4 h-100 bg-white shadow-sm position-relative">
+                    <div class="d-flex justify-content-between mb-2">
+                        <strong style="color: #9A5A1A;">${fullName}</strong>
+                        <small class="text-muted bg-light px-2 rounded-pill">${msgDate}</small>
+                    </div>
+                    <div class="small text-muted mb-3"><i class="fa-solid fa-envelope me-1"></i> ${m.email}</div>
+                    <p class="mb-0 text-dark" style="line-height:1.6;">"${m.message}"</p>
+                    <button class="btn btn-link text-danger btn-sm position-absolute top-0 end-0 m-2" onclick="deleteMessage('${m.id}')">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+            });
+        }
+
+        async function deleteMessage(id) {
+            if (confirm("Delete this message?")) {
+                await supabaseClient.from('messages').delete().eq('id', id);
+                renderMessages();
+            }
+        }
+
+        // Fetch Categories
+        async function renderAdminCategories() {
+            const tbody = document.getElementById('admin-category-list');
+            tbody.innerHTML = '<tr><td colspan="3" class="text-center py-3"><span class="spinner-border spinner-border-sm"></span> Loading...</td></tr>';
+
+            const { data: categories } = await supabaseClient.from('categories').select('*').order('name');
+            tbody.innerHTML = '';
+
+            if (categories) {
+                categories.forEach(cat => {
+                    tbody.innerHTML += `
+                        <tr style="transition:0.3s;">
+                            <td><img src="${cat.image_url}" class="product-thumbnail"></td>
+                            <td class="fw-medium text-dark text-capitalize">${cat.name}</td>
+                            <td class="text-end"><button class="btn btn-sm btn-outline-danger px-3 rounded-pill" onclick="deleteCategory('${cat.id}')"><i class="fa-solid fa-trash me-1"></i> Remove</button></td>
+                        </tr>
+                    `;
+                });
+            }
+        }
+
+        async function deleteCategory(catId) {
+            if (confirm("Remove this category?")) {
+                const { error } = await supabaseClient.from('categories').delete().eq('id', catId);
+
+                if (error) {
+                    alert("Failed to delete category: " + error.message);
+                } else {
+                    renderAdminCategories();
+                }
+            }
+        }
+
+        // Add Category Submission
+        const addCategoryForm = document.getElementById('addCategoryForm');
+        if (addCategoryForm) {
+            addCategoryForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const btn = document.getElementById('catSubmitBtn');
+                const nameInput = document.getElementById('catName').value;
+                const fileInput = document.getElementById('catImageFile').files[0];
+
+                if (!fileInput) return;
+
+                const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+                if (sessionError || !session) {
+                    alert("Your session has expired. Please log in again.");
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                btn.innerText = "Uploading...";
+                btn.disabled = true;
+
+                try {
+                    const imageUrl = await uploadImageToStorage(fileInput, 'categories');
+                    const catSlug = nameInput.toLowerCase().trim().replace(/[^a-z0-9]/g, '-');
+
+                    const { error } = await supabaseClient
+                        .from('categories')
+                        .insert([{ id: catSlug, name: nameInput, image_url: imageUrl }]);
+
+                    if (error) throw error;
+
+                    addCategoryForm.reset();
+                    renderAdminCategories();
+                    alert("Category added successfully!");
+                } catch (err) {
+                    alert("Error creating category: " + err.message);
+                } finally {
+                    btn.innerText = "Add Category";
+                    btn.disabled = false;
+                }
+            });
+        }
+
+        async function populateCategoryDropdown(targetSelectId = 'prodCategory') {
+            const select = document.getElementById(targetSelectId);
+            if (!select) return;
+
+            const { data: categories } = await supabaseClient.from('categories').select('*').order('name');
+            select.innerHTML = '';
+
+            if (categories) {
+                categories.forEach(cat => {
+                    select.innerHTML += `<option value="${cat.id}">${cat.name}</option>`;
+                });
+            }
+        }
+
+        // Fetch Products
+        async function renderAdminProducts() {
+            const tbody = document.getElementById('admin-product-list');
+            const emptyState = document.getElementById('empty-state');
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4"><span class="spinner-border spinner-border-sm"></span> Loading products...</td></tr>';
+
+            const { data: products } = await supabaseClient.from('products').select('*').order('created_at', { ascending: false });
+            tbody.innerHTML = '';
+
+            if (!products || products.length === 0) {
+                emptyState.classList.remove('d-none');
+                document.querySelector('#manage-view .table-responsive').classList.add('d-none');
+                return;
+            }
+
+            emptyState.classList.add('d-none');
+            document.querySelector('#manage-view .table-responsive').classList.remove('d-none');
+
+            products.forEach(p => {
+                tbody.innerHTML += `
+                    <tr style="transition:0.3s;">
+                        <td><img src="${p.image_url}" class="product-thumbnail"></td>
+                        <td class="fw-medium text-dark">${p.title}</td>
+                        <td class="fw-bold text-muted">₹${p.price}</td>
+                        <td class="text-capitalize text-secondary">${p.category_id}</td>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-outline-primary px-3 rounded-pill me-1" onclick="openEditModal('${p.id}')"><i class="fa-solid fa-pen-to-square me-1"></i> Edit</button>
+                            <button class="btn btn-sm btn-outline-danger px-3 rounded-pill" onclick="deleteProduct('${p.id}')"><i class="fa-solid fa-trash me-1"></i> Remove</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        async function openEditModal(productId) {
+            const { data: p, error } = await supabaseClient.from('products').select('*').eq('id', productId).single();
+            if (error || !p) {
+                alert("Failed to load product details.");
+                return;
+            }
+
+            await populateCategoryDropdown('editProdCategory');
+
+            document.getElementById('editProdId').value = p.id;
+            document.getElementById('editProdTitle').value = p.title;
+            document.getElementById('editProdPrice').value = p.price;
+            document.getElementById('editProdCategory').value = p.category_id;
+            document.getElementById('editProdBadge').value = p.badge || 'None';
+            document.getElementById('editProdDesc').value = p.description || '';
+
+            const editModal = new bootstrap.Modal(document.getElementById('editProductModal'));
+            editModal.show();
+        }
+
+        // Edit Product Submission
+        const editProductForm = document.getElementById('editProductForm');
+        if (editProductForm) {
+            editProductForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                const prodId = document.getElementById('editProdId').value;
+                const fileInput = document.getElementById('editProdImageFile').files[0];
+                const submitBtn = document.getElementById('editSubmitBtn');
+
+                submitBtn.innerText = "Updating...";
+                submitBtn.disabled = true;
+
+                try {
+                    let updatedData = {
+                        title: document.getElementById('editProdTitle').value,
+                        price: parseFloat(document.getElementById('editProdPrice').value),
+                        category_id: document.getElementById('editProdCategory').value,
+                        badge: document.getElementById('editProdBadge').value,
+                        description: document.getElementById('editProdDesc').value
+                    };
+
+                    if (fileInput) {
+                        const newImageUrl = await uploadImageToStorage(fileInput, 'products');
+                        updatedData.image_url = newImageUrl;
+                    }
+
+                    const { error } = await supabaseClient.from('products').update(updatedData).eq('id', prodId);
+                    if (error) throw error;
+
+                    const editModalEl = document.getElementById('editProductModal');
+                    const modal = bootstrap.Modal.getInstance(editModalEl);
+                    modal.hide();
+
+                    renderAdminProducts();
+                    alert("Product updated successfully!");
+                } catch (err) {
+                    alert("Failed to update product: " + err.message);
+                } finally {
+                    submitBtn.innerText = "Save Changes";
+                    submitBtn.disabled = false;
+                }
+            });
+        }
+
+        async function deleteProduct(productId) {
+            if (confirm("Are you sure you want to permanently remove this product?")) {
+                const { error } = await supabaseClient.from('products').delete().eq('id', productId);
+
+                if (error) {
+                    alert("Failed to delete product: " + error.message);
+                } else {
+                    renderAdminProducts();
+                }
+            }
+        }
+
+        // Add Product Submission
+        const addProductForm = document.getElementById('addProductForm');
+        if (addProductForm) {
+            addProductForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                const files = document.getElementById('prodImageFile').files;
+                const submitBtn = document.getElementById('adminSubmitBtn');
+
+                if (files.length === 0) return;
+
+                const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+                if (sessionError || !session) {
+                    alert("Your session has expired. Please log in again.");
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                submitBtn.innerText = "Uploading Images to Supabase...";
+                submitBtn.disabled = true;
+
+                try {
+                    const uploadPromises = Array.from(files).map(file => uploadImageToStorage(file, 'products'));
+                    const imageUrls = await Promise.all(uploadPromises);
+
+                    const { error } = await supabaseClient.from('products').insert([{
+                        title: document.getElementById('prodTitle').value,
+                        price: parseFloat(document.getElementById('prodPrice').value),
+                        category_id: document.getElementById('prodCategory').value,
+                        badge: document.getElementById('prodBadge').value,
+                        description: document.getElementById('prodDesc').value,
+                        image_url: imageUrls[0],
+                        gallery_urls: imageUrls
+                    }]);
+
+                    if (error) throw error;
+
+                    const successMsg = document.getElementById('successMsg');
+                    successMsg.classList.remove('d-none');
+                    this.reset();
+
+                    setTimeout(() => { successMsg.classList.add('d-none'); }, 3000);
+                } catch (err) {
+                    alert("Failed to upload product: " + err.message);
+                } finally {
+                    submitBtn.innerText = "Add Product to Store";
+                    submitBtn.disabled = false;
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
