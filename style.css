@@ -204,7 +204,7 @@ a {
     min-height: 500px; 
     display: flex; 
     align-items: center; 
-    background: url('https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat; 
+    background: url('gupta-logo.png') center/cover no-repeat; 
     background-attachment: fixed; 
 }
 
