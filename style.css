@@ -198,16 +198,25 @@ a {
 }
 
 /* Hero Section */
-.hero-section { 
-    position: relative; 
-    height: 80vh; 
-    min-height: 500px; 
-    display: flex; 
-    align-items: center; 
-    background: url('gupta-logo.png') center/cover no-repeat; 
-    background-attachment: fixed; 
+.hero-section {
+    position: relative;
+    background-image: url('gupta-logo.png'); /* Ensure this matches your exact filename */
+    background-size: cover;          /* Scales image to cover the section */
+    background-position: center;     /* Centers the banner nicely */
+    background-repeat: no-repeat;
+    height: 600px;                   /* Default height for desktops */
+    display: flex;
+    align-items: center;
 }
 
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .hero-section {
+        height: 300px;               /* Smaller height for mobile screens */
+        background-size: contain;    /* Prevents the image from getting cut off on mobile */
+        background-color: #f9f6f0;   /* Optional background color fill if image has blank spaces */
+    }
+}
 .hero-overlay { 
     position: absolute; 
     inset: 0; 
