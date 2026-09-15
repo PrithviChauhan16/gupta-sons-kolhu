@@ -175,17 +175,8 @@ a {
     background-color: var(--badge-red) !important; 
 }
 #main-nav {
-    /* 1. Make it stick to the top */
-    position: sticky;
-    top: 0;
-    z-index: 1050; /* Ensures it stays above all other content */
-    
-    /* 2. Add transparency */
-    /* The 0.85 is the opacity. Change to 0.5 for more transparent, or 0.95 for more solid */
+    /* Only handles the transparency and blur */
     background-color: rgba(255, 255, 255, 0.85) !important; 
-    
-    /* 3. Optional Pro-tip: Add a blur effect (Glassmorphism) */
-    /* This blurs the content behind the navbar so your links remain easy to read */
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 }
