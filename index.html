@@ -147,54 +147,54 @@
             <div class="row g-4" id="product-grid"></div>
         </div>
     </section>
-<!-- Split Media & Musings Section -->
-<section class="split-musings-section container-fluid p-0">
-    <div class="row g-0">
+<!-- Split Media & Gallery Section -->
+<section class="split-gallery-section container-fluid p-0">
+    <div class="row g-0 min-vh-100">
+        
         <!-- Left Dark Side with Video -->
-        <div class="col-lg-6 dark-side d-flex flex-column justify-content-between p-5">
-            <div>
-                <h2 class="display-5 text-white fw-light mb-3" style="font-family: 'Jost', sans-serif;">Hey, I'm Gupta Sons</h2>
-                <p class="text-light opacity-75 fs-5 fw-light mb-4" style="max-width: 450px;">
-                    Welcome to our traditional corner, where slow wood-pressed extraction meets pure quality, and every batch tells a story of heritage.
-                </p>
+        <div class="col-lg-6 dark-side d-flex flex-column align-items-center justify-content-center p-4 p-md-5" style="background-color: #0a0a0a;">
+            <!-- Video Container -->
+            <div class="media-container w-100 h-100 d-flex justify-content-center align-items-center p-2 p-md-3 rounded shadow-lg" style="background-color: #000; max-height: 85vh;">
+                <video autoplay muted loop playsinline class="w-100 h-100" style="object-fit: contain; border-radius: 8px;">
+                    <source src="website-video.MP4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
             </div>
-            
-            <div class="my-4">
-                <!-- Video Container -->
-                <div class="media-container rounded shadow-lg overflow-hidden" style="max-width: 500px;">
-                    <video autoplay muted loop playsinline class="w-100 h-auto" style="object-fit: cover; max-height: 350px; display: block;">
-                        <source src="website-video.MP4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-            </div>
-
-            <div>
-                <a href="#contact" class="btn btn-light rounded-pill px-4 py-2 fw-medium text-dark" style="background: #f4f6e8; border: none;">Drop a note</a>
+            <!-- Retained Action Button -->
+            <div class="mt-4 text-center w-100">
+                <a href="#contact" class="btn btn-light rounded-pill px-5 py-2 fw-medium text-dark shadow-sm" style="background: #f4f6e8; border: none;">Drop a note</a>
             </div>
         </div>
 
-        <!-- Right Light Side with Larger Stacked Photos -->
-        <div class="col-lg-6 light-side p-5 d-flex flex-column justify-content-center" style="background-color: #f4f6e8;">
-            <div class="mx-auto" style="max-width: 500px; width: 100%;">
-                <h3 class="display-6 fw-light mb-4 text-dark" style="font-family: 'Jost', sans-serif;">Gallery Highlights</h3>
+        <!-- Right Light Side with Pinterest Layout (4 Photos) -->
+        <div class="col-lg-6 light-side p-4 p-md-5 d-flex align-items-center" style="background-color: #f4f6e8;">
+            <!-- Masonry Grid Wrapper -->
+            <div class="w-100 mx-auto" style="column-count: 2; column-gap: 1rem; max-width: 700px;">
                 
-                <!-- Large Photo 1 -->
-                <div class="mb-4">
-                    <img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=600&q=80" alt="Gallery Photo 1" class="w-100 rounded shadow-sm" style="height: 220px; object-fit: cover;">
+                <!-- Photo 1 (Tall) -->
+                <div class="mb-3" style="break-inside: avoid;">
+                    <img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=600&q=80" alt="Gallery Photo 1" class="w-100 rounded shadow-sm" style="object-fit: cover; aspect-ratio: 3/4;">
+                </div>
+                
+                <!-- Photo 2 (Square) -->
+                <div class="mb-3" style="break-inside: avoid;">
+                    <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80" alt="Gallery Photo 2" class="w-100 rounded shadow-sm" style="object-fit: cover; aspect-ratio: 1/1;">
+                </div>
+                
+                <!-- Photo 3 (Medium Tall) -->
+                <div class="mb-3" style="break-inside: avoid;">
+                    <img src="https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=600&q=80" alt="Gallery Photo 3" class="w-100 rounded shadow-sm" style="object-fit: cover; aspect-ratio: 4/5;">
+                </div>
+                
+                <!-- Photo 4 (Square) -->
+                <div class="mb-3" style="break-inside: avoid;">
+                    <!-- Placeholder link added for the 4th image -->
+                    <img src="https://images.unsplash.com/photo-1615486171448-422fb75bb421?auto=format&fit=crop&w=600&q=80" alt="Gallery Photo 4" class="w-100 rounded shadow-sm" style="object-fit: cover; aspect-ratio: 1/1;">
                 </div>
 
-                <!-- Large Photo 2 -->
-                <div class="mb-4">
-                    <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80" alt="Gallery Photo 2" class="w-100 rounded shadow-sm" style="height: 220px; object-fit: cover;">
-                </div>
-
-                <!-- Large Photo 3 -->
-                <div>
-                    <img src="https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=600&q=80" alt="Gallery Photo 3" class="w-100 rounded shadow-sm" style="height: 220px; object-fit: cover;">
-                </div>
             </div>
         </div>
+        
     </div>
 </section>
     <section id="contact" class="py-5 bg-white">
