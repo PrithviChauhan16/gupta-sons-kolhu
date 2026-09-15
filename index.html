@@ -168,32 +168,37 @@
 
         <!-- Right Light Side with Pinterest Layout (4 Photos) -->
         <div class="col-lg-6 light-side p-4 p-md-5 d-flex align-items-center" style="background-color: #f4f6e8;">
-            <!-- Masonry Grid Wrapper -->
-            <div class="w-100 mx-auto" style="column-count: 2; column-gap: 1rem; max-width: 700px;">
+<!-- Flexbox Grid Wrapper -->
+            <div class="row w-100 mx-auto" style="max-width: 700px;">
                 
-                <!-- Photo 1 (Tall) -->
-                <div class="mb-3" style="break-inside: avoid;">
-                    <img src="image-1.png" alt="Gallery Photo 1" class="w-100 rounded shadow-sm" style="object-fit: cover; aspect-ratio: 3/4;">
+                <!-- Left Column -->
+                <div class="col-6 d-flex flex-column pe-2">
+                    <!-- Photo 1 (Tall) -->
+                    <div class="mb-3">
+                        <img src="image-1.png" alt="Gallery Photo 1" class="w-100 rounded shadow-sm" style="object-fit: cover; aspect-ratio: 3/4;">
+                    </div>
+                    
+                    <!-- Photo 3 (Medium Tall) -->
+                    <div class="mb-0 mt-auto">
+                        <img src="image-3.png" alt="Gallery Photo 3" class="w-100 rounded shadow-sm" style="object-fit: cover; aspect-ratio: 4/5;">
+                    </div>
                 </div>
                 
-                <!-- Photo 2 (Square) -->
-                <div class="mb-3" style="break-inside: avoid;">
-                    <img src="image-2.png" alt="Gallery Photo 2" class="w-100 rounded shadow-sm" style="object-fit: cover; aspect-ratio: 1/1;">
+                <!-- Right Column -->
+                <div class="col-6 d-flex flex-column ps-2">
+                    <!-- Photo 2 (Square) -->
+                    <div class="mb-3">
+                        <img src="image-2.png" alt="Gallery Photo 2" class="w-100 rounded shadow-sm" style="object-fit: cover; aspect-ratio: 1/1;">
+                    </div>
+                    
+                    <!-- Photo 4 (Square) - mt-auto pushes it to the bottom -->
+                    <div class="mb-0 mt-auto">
+                        <!-- Placeholder link added for the 4th image -->
+                        <img src="image-4.png" alt="Gallery Photo 4" class="w-100 rounded shadow-sm" style="object-fit: cover; aspect-ratio: 1/1;">
+                    </div>
                 </div>
                 
-                <!-- Photo 3 (Medium Tall) -->
-                <div class="mb-3" style="break-inside: avoid;">
-                    <img src="image-3.png" alt="Gallery Photo 3" class="w-100 rounded shadow-sm" style="object-fit: cover; aspect-ratio: 4/5;">
-                </div>
-                
-                <!-- Photo 4 (Square) -->
-                <div class="mb-3" style="break-inside: avoid;">
-                    <!-- Placeholder link added for the 4th image -->
-                    <img src="image-4.png" alt="Gallery Photo 4" class="w-100 rounded shadow-sm" style="object-fit: cover; aspect-ratio: 1/1;">
-                </div>
-
             </div>
-        </div>
         
     </div>
 </section>
