@@ -58,8 +58,6 @@ function showPolicy(id,btn){
  document.getElementById(id).classList.add('active'); btn.classList.add('active');
  document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});
 }
-</script>
- <script>
 // Automatically open the correct policy tab based on URL hash (e.g. #privacy, #terms)
 window.addEventListener('DOMContentLoaded', () => {
     const hash = window.location.hash.substring(1);
